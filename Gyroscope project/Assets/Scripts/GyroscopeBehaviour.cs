@@ -4,6 +4,7 @@ using System.IO;
 using UnityEngine;
 
 
+//This code is inspired/taken by .https://www.youtube.com/watch?v=P5JxTfCAOXo 
 public class GyroscopeBehaviour : MonoBehaviour
 {
     //We have a bool to see if gyroscope is enabled in the phone being used.
@@ -12,7 +13,7 @@ public class GyroscopeBehaviour : MonoBehaviour
     //A private gyroscope objects gets created, called gyro.
     private Gyroscope gyro;
 
-    //A camera GameObject its added to the scene.
+    //A camera GameObject its added to the scene. This is not needed for this project tho, but was for the ball game project
     private GameObject cameraContainer;
 
     //Quaternions are implemented because we need it to calculate later.
@@ -27,15 +28,17 @@ public class GyroscopeBehaviour : MonoBehaviour
         //cameraContainer gets defined as a new game object, with the name "Camera Container"
         cameraContainer = new GameObject("Camera Container");
 
-        //
+        //Just some camera thingys, doesn't matter
         cameraContainer.transform.position = transform.position;
         transform.SetParent(cameraContainer.transform);
 
+        //If gyroEnabled it becomes EnableGyro()
         gyroEnabled = EnableGyro();
     }
-
+    //This is EnableGyro
     private bool EnableGyro()
     {
+        //If our system supports Gyroscope, run this.
         if (SystemInfo.supportsGyroscope)
         {
             gyro = Input.gyro;
@@ -49,9 +52,10 @@ public class GyroscopeBehaviour : MonoBehaviour
 
         return false;
     }
-
+    //Undates
     private void Update()
     {
+        //if gyro is enabled, we start saving the data, from the gyroscopes x y and z position
         if (gyroEnabled)
         {
             if (startDataSave)
@@ -64,11 +68,13 @@ public class GyroscopeBehaviour : MonoBehaviour
 
     public void SaveData()
     {
+        //We have a file to save the data in
         string fileName = Application.dataPath + "/GyroscopeInfo.csv";
 
         StreamWriter sw = new StreamWriter(fileName, false);
         sw.WriteLine("GravityX, GravityY, GravityZ");
 
+        //If the data changes, move to the next collum
         for(int i = 0; i < info.Count; i++)
         {
             sw.WriteLine(info[i][0] + "," + info[i][1] + "," + info[i][2]);
@@ -80,6 +86,8 @@ public class GyroscopeBehaviour : MonoBehaviour
     }
 
     bool startDataSave = false;
+
+    //We click the button to start SaveData script
     public void ButtonClicked()
     {
         Debug.Log("Started");
